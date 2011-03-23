@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas Turrets</title>
+        <script type="text/javascript" src="src/prototype.js"></script>
+        <script type="text/javascript" src="src/config.js"></script>
+        <script type="text/javascript" src="src/collision.js"></script>
+        <script type="text/javascript" src="src/mountain.js"></script>
+        <script type="text/javascript" src="src/bullet.js"></script>
+        <script type="text/javascript">
+            window.onload = function() {
+            
+            	var drawingCanvas,powerStrength,context,m,timer,t,fps,timeInterval,rad,pow,b,b2;
+            	b = timer = null;
+                // Variables
+                drawingCanvas = document.getElementById('map');
+                context = drawingCanvas.getContext('2d');
+                    
+                // Move to a comfortable position
+                context.translate( 0, drawingCanvas.height );
+                m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 );
+                m.draw();
+                context.translate( 0, -drawingCanvas.height );
+                
+                collision.addMap( m.generate() );
+                
+                
+                t=0; // time in ms
+                fps = 75; // frames per second
+                timeInterval = 1000 / fps; // in ms
+                
+                function clearCanvas() {
+                     context.clearRect( 0, 0, drawingCanvas.width, drawingCanvas.height );
+                }
+                
+                rad = 310 * Math.PI / 180;
+                pow = 900;
+                    
+                
+                b2 = new Bullet( context, 1000, 600 );
+//                b.fire ( rad , pow );
+                
+                rad = 230 * Math.PI / 180;
+                
+                
+                function angle2Rad(angle) {
+                	return angle * Math.PI / 180;
+                }
+                
+                function updateBall() {
+                    
+                	
+                	//clearCanvas();
+                    b.update( timeInterval / 1000 );
+                    b2.update( timeInterval / 1000 );
+                    
+                    // Update
+                    //m.draw();
+                    if( b !== null )
+                    {
+                    	b.draw();
+                    }
+                    b2.draw();
+                    
+                    // Collision
+/*                    
+                    if ( collision.hit( b.x, b.y ) ) {
+                        clearInterval( timer );
+                    }
+*/
+                }
+                
+
+
+                Event.observe(document, 'keyup', function(event){ 
+
+                    //space
+                    var e = Event.element(event);
+                    
+                    if (e.tagName.toLowerCase() !== 'input')
+                    {
+                    	powerStrength = parseInt($("i-power").getValue());
+                    
+                    	
+                    	if (event.keyCode == Event.KEY_UP) {
+                            ++powerStrength;
+                            $("i-power").value=powerStrength;
+                        } else if (event.keyCode == Event.KEY_DOWN) {
+                            --powerStrength;
+                            $("i-power").value=powerStrength;
+                        } else if (event.keyCode == 32 ) {
+                        	console.log(rad);
+                            console.log(pow);
+                            if (timer === null)
+                            {
+                            	alert('timer');
+                            	timer = setInterval(updateBall, timeInterval);	
+                            }
+                            	
+                            
+//                        	b2.fire ( rad , pow );
+                        	
+                        	rad = angle2Rad(parseInt($("i-rad").getValue()));
+                        	pow = $("i-power").getValue();
+                        	console.log(rad);
+                        	console.log(pow);
+                        	b = new Bullet( context, 0, 600 );
+                            b.fire(rad,pow);
+                            
+                        }	
+                    }
+                  });            
+            }
+    </script>
+    </head>
+    <body>
+        <canvas id="map" width="1000" height="600">
+            Sorry, does not look like you have support for canvas.<br />
+            I think there's a DOS version somewhere...............
+        </canvas>
+        
+        <p>Power:<input type="text" id="i-power" value="1100" /></p>
+        <p>Angle:<input type="text" id="i-rad" value="300" /></p>
+    </body>
+</html>
