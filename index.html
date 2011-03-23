@@ -5,6 +5,24 @@
         <script type="text/javascript" src="src/config.js"></script>
         <script type="text/javascript" src="src/collision.js"></script>
         <script type="text/javascript" src="src/mountain.js"></script>
+        <script type="text/javascript">
+            window.onload = function() {
+            
+                // Variables
+                var drawingCanvas = document.getElementById('map');
+                
+                // Check the element is in the DOM and the browser supports canvas
+                if(drawingCanvas.getContext) {
+                    var context = drawingCanvas.getContext('2d');
+                    
+                    // Move to a comfortable position
+                    context.translate( 0, drawingCanvas.height );
+                    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height );
+                    m.draw();
+                }
+            
+            }
+    </script>
     </head>
     <body>
         <canvas id="map" width="600" height="300">
