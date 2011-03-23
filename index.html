@@ -2,9 +2,11 @@
 <html>
     <head>
         <title>Canvas Turrets</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
         <script type="text/javascript" src="src/config.js"></script>
         <script type="text/javascript" src="src/collision.js"></script>
         <script type="text/javascript" src="src/mountain.js"></script>
+        <script type="text/javascript" src="src/turret.js"></script>
         <script type="text/javascript">
             window.onload = function() {
             
@@ -19,8 +21,12 @@
                     context.translate( 0, drawingCanvas.height );
                     var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height );
                     m.draw();
-                }
-            
+                    
+	                var turret = new Turret(context, {
+							x: 100,
+							y: 100
+						});
+	                }
             }
     </script>
     </head>
