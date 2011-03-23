@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas Turrets</title>
+        <script type="text/javascript" src="src/config.js"></script>
+        <script type="text/javascript" src="src/collision.js"></script>
+        <script type="text/javascript" src="src/mountain.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+        map = new Array();
+        map[ 0 ] = 0;
+        map[ 25 ] = 14;
+        map[ 50 ] = 14;
+        map[ 75 ] = 32;
+        map[ 100 ] = 29;
+        map[ 125 ] = 65;
+        map[ 150 ] = 69;
+        map[ 175 ] = 71;
+        map[ 200 ] = 97;
+        map[ 225 ] = 140;
+        map[ 250 ] = 131;
+        map[ 275 ] = 153;
+        map[ 300 ] = 173;
+        map[ 325 ] = 145;
+        map[ 350 ] = 129;
+        map[ 375 ] = 127;
+        map[ 400 ] = 85;
+        map[ 425 ] = 94;
+        map[ 450 ] = 87;
+        map[ 475 ] = 66;
+        map[ 500 ] = 67;
+        map[ 525 ] = 42;
+        map[ 550 ] = -6;
+        map[ 575 ] = -16;
+        map[ 600 ] = 0;
+        
+        collision.addMap( map );
+        
+        //  Test for an impact at iteration point 100
+        directImpact    = [
+            { x : 0,    y : 0 },
+            { x : 10,   y : 10 },
+            { x : 20,   y : 20 },
+            { x : 40,   y : 40 },
+            { x : 50,   y : 50 },
+            { x : 90,   y : 40 },
+            { x : 100,  y : 20 },   // This is where we hit
+        ];
+        
+        //  Perform a hit between the interation points
+        indirectImpact  = [
+            { x : 0,    y : 0 },
+            { x : 25,   y : 15 },
+            { x : 50,   y : 20 },
+            { x : 70,   y : 30 }, // Impact is after this one
+            { x : 90,   y : 50 }, // and before this one
+            { x : 100,  y : 40 },
+            { x : 120,  y : 20 },
+        ];
+        
+        // Shoot outside
+        outOfBounds     = [
+            { x : 0,        y : 0 },
+            { x : 100,      y : 40 },
+            { x : 200,      y : 100 },
+            { x : 300,      y : 175 },
+            { x : 400,      y : 155 },
+            { x : 500,      y : 95 },
+            { x : 600,      y : 70 },   // Goes outside the map
+        ];
+        
+        function main ( trace, name ) {
+            name = name||'trajectory';
+            var status;
+            for ( var i in trace ) {
+                if ( collision.hit(trace[i].x, trace[i].y) ) {
+                    status = 'hit';    
+                } else {
+                    status = 'miss';
+                }
+                
+                console.log(name + ' position ' + trace[i].x + ', ' + trace[i].y + ' ' + status + ' target');
+            }
+        }
+        
+        main(directImpact,      'trace for direct impact');
+        main(indirectImpact,    'trace for indirect impact');
+        main(outOfBounds,       'trace for out of bounds');
+        </script>
+    </body>
+</html>
