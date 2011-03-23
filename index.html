@@ -5,27 +5,65 @@
         <script type="text/javascript" src="src/config.js"></script>
         <script type="text/javascript" src="src/collision.js"></script>
         <script type="text/javascript" src="src/mountain.js"></script>
+        <script type="text/javascript" src="src/bullet.js"></script>
         <script type="text/javascript">
             window.onload = function() {
             
                 // Variables
                 var drawingCanvas = document.getElementById('map');
-                
-                // Check the element is in the DOM and the browser supports canvas
-                if(drawingCanvas.getContext) {
-                    var context = drawingCanvas.getContext('2d');
+                var context = drawingCanvas.getContext('2d');
                     
-                    // Move to a comfortable position
-                    context.translate( 0, drawingCanvas.height );
-                    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height );
-                    m.draw();
+                // Move to a comfortable position
+                context.translate( 0, drawingCanvas.height );
+                var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 );
+                m.draw();
+                context.translate( 0, -drawingCanvas.height );
+                
+                collision.addMap( m.generate() );
+                
+                var timer;
+                var t=0; // time in ms
+                var fps = 75; // frames per second
+                var timeInterval = 1000 / fps; // in ms
+                
+                function clearCanvas() {
+                     context.clearRect( 0, 0, drawingCanvas.width, drawingCanvas.height );
                 }
+                
+                var rad = 310 * Math.PI / 180;
+                var pow = 900;
+                    
+                var b = new Bullet( context, 0, 600 );
+                var b2 = new Bullet( context, 1000, 600 );
+                b.fire ( rad , pow );
+                
+                rad = 230 * Math.PI / 180;
+                b2.fire ( rad , pow );
+                
+                function updateBall() {
+                    //clearCanvas();
+                    b.update( timeInterval / 1000 );
+                    b2.update( timeInterval / 1000 );
+                    
+                    // Update
+                    //m.draw();
+                    b.draw();
+                    b2.draw();
+                    
+                    // Collision
+                    if ( collision.hit( b.x, b.y ) ) {
+                        clearInterval( timer );
+                    }
+                }
+                
+                timer = setInterval(updateBall, timeInterval);
+
             
             }
     </script>
     </head>
     <body>
-        <canvas id="map" width="600" height="300">
+        <canvas id="map" width="1000" height="600">
             Sorry, does not look like you have support for canvas.<br />
             I think there's a DOS version somewhere...............
         </canvas>
