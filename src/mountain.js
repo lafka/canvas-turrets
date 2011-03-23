@@ -13,9 +13,11 @@ function Mountain( context, width, height ) {
 Mountain.prototype = {
     
     // Draw the mountain
-    draw: function() {
+    draw: function() {    	
         var m = this.generate();
         
+        this.context.translate( 0, this.context.canvas.height );
+                
         // Save the context
         this.context.save();
         
@@ -34,6 +36,8 @@ Mountain.prototype = {
         
         // Restore the context
         this.context.restore();
+        
+        this.context.translate( 0, -this.context.canvas.height );
     },
     
     // Builds the mountain
