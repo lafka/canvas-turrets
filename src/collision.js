@@ -55,10 +55,32 @@
     hit      : function ( x, y ) {
         var map = this.getMap();
         
-        // The key doesent exists
+        // The key doesent exists, that means an indirect match
         if ( map[x] === undefined ) {
-            // Little hack to search for nearest based on map.iteration valu
-        }
             
+            // Little hack to search for nearest based on map.iteration value
+            var match = config.map.iteration*Math.ceil(x/config.map.iteration);
+            var divider, result, pos;
+            
+            //  Draw the line here....
+            if ( match < config.map.iteration ) {
+                pos     = x;
+            } else {
+                pos    = match-x;
+            }
+            
+            divider = x/config.map.iteration;
+            result  = divider*(match-pos);
+            console.log( '_pos: ' + pos + ' match: ' + match + " results in: " + result + " (divider = " + divider + ")");
+            if ( map[match] > result ) {
+                return true;
+            }
+        } else {
+            if ( map[x] > y ) {
+                return true;    
+            }
+        }
+        
+        return false;
     }
 };
