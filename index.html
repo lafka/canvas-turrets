@@ -18,8 +18,12 @@
                 var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 );
                 m.draw();
                 context.translate( 0, -drawingCanvas.height );
+                var gen = m.generate();
+                collision.addMap( gen );
                 
-                collision.addMap( m.generate() );
+                for ( var i in gen ) {
+                    console.log( "Map [ " + i + " ] = " + gen[i]);
+                }
                 
                 var timer;
                 var t=0; // time in ms
@@ -34,25 +38,33 @@
                 var pow = 900;
                     
                 var b = new Bullet( context, 0, 600 );
-                var b2 = new Bullet( context, 1000, 600 );
+                //var b2 = new Bullet( context, 1000, 600 );
                 b.fire ( rad , pow );
                 
-                rad = 230 * Math.PI / 180;
-                b2.fire ( rad , pow );
+                //rad = 230 * Math.PI / 180;
+                //b2.fire ( rad , pow );
                 
                 function updateBall() {
                     //clearCanvas();
                     b.update( timeInterval / 1000 );
-                    b2.update( timeInterval / 1000 );
+                    //b2.update( timeInterval / 1000 );
                     
                     // Update
                     //m.draw();
                     b.draw();
-                    b2.draw();
+                    //b2.draw();
                     
                     // Collision
-                    if ( collision.hit( b.x, b.y ) ) {
+                    if ( collision.hit( b.x, (600-b.y) ) ) {
                         clearInterval( timer );
+                        console.log('+Impact at ' + Math.floor(b.x) + ', ' + Math.floor(600-b.y));
+                    }
+                    
+                    //console.log ( 'position: ' + Math.floor(b.x) + ', ' + (600-Math.floor(b.y)) );
+                    
+                    //if ( b.y < 0 || b2.y < 0 ) {
+                    if ( b.y < 0 ) {
+                        clearInterval(timer);
                     }
                 }
                 

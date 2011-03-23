@@ -54,27 +54,36 @@
      */
     hit      : function ( x, y ) {
         var map = this.getMap();
+        x = Math.floor(x);
         
         // The key doesent exists, that means an indirect match
         if ( map[x] === undefined ) {
             
             // Little hack to search for nearest based on map.iteration value
-            var match = config.map.iteration*Math.ceil(x/config.map.iteration);
-            var divider, result, pos;
-            
-            //  Draw the line here....
-            if ( match < config.map.iteration ) {
-                pos     = x;
+            var next        = ( config.map.iteration*Math.ceil(x/config.map.iteration) );
+            var prev        = ( config.map.iteration*Math.floor(x/config.map.iteration) );
+            var match       = config.map.iteration*Math.round(x/config.map.iteration);
+        
+            // If the closes iteration point is comming up
+            if ( (next-x) < (x-prev) ) {
+                // Calculate the value of each point on path
+                var diff    = (map[next]-map[prev])/config.map.iteration;
+                var value   = diff*(next-x);
+                
+                if ( (map[next]-value) >= y ) {
+                    return true;
+                }
+            } else if ( (next-x) > (x-prev) ) {
+                var diff    = (map[prev]-map[next])/config.map.iteration;
+                var value   = diff*(x-prev);
+                
+                if ( (map[prev]-value) >= y ) {
+                    return true;
+                }
             } else {
-                pos    = match-x;
-            }
-            
-            divider = x/config.map.iteration;
-            result  = divider*(match-pos);
-            console.log( '_pos: ' + pos + ' match: ' + match + " results in: " + result + " (divider = " + divider + ")");
-            if ( map[match] > result ) {
                 return true;
             }
+            
         } else {
             if ( map[x] > y ) {
                 return true;    
