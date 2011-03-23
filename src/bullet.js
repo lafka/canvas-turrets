@@ -14,7 +14,7 @@ Bullet.prototype = {
         // Save the context
         this.context.save();
         
-        this.context.translate( this.x, 600 - this.y ); // @todo: change this 600 to be the height of our canvas
+        this.context.translate( this.x, 600 -this.y ); // @todo: change this 600 to be the height of our canvas
         this.context.strokeStyle = '#666';
         this.context.fillStyle = '#f09';
         
@@ -28,7 +28,7 @@ Bullet.prototype = {
         
         // Restore the context
         this.context.restore();
-    },
+	},
     
     // Update the bullet
     update: function( dt ) {
