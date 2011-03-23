@@ -10,7 +10,7 @@ config = {
     map : {
         width       : 600,
         height      : 300,
-        iterations  : 25,
+        iteration   : 25,
         range       : 50,
         stroke      : '#666',
         color       : '#999'
