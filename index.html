@@ -1,83 +1,121 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Canvas Turrets</title>
-        <script type="text/javascript" src="src/config.js"></script>
-        <script type="text/javascript" src="src/collision.js"></script>
-        <script type="text/javascript" src="src/mountain.js"></script>
-        <script type="text/javascript" src="src/bullet.js"></script>
-        <script type="text/javascript">
-            window.onload = function() {
-            
-                // Variables
-                var drawingCanvas = document.getElementById('map');
-                var context = drawingCanvas.getContext('2d');
-                    
-                // Move to a comfortable position
-                context.translate( 0, drawingCanvas.height );
-                var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 );
-                m.draw();
-                context.translate( 0, -drawingCanvas.height );
-                var gen = m.generate();
-                collision.addMap( gen );
-                
-                for ( var i in gen ) {
-                    console.log( "Map [ " + i + " ] = " + gen[i]);
-                }
-                
-                var timer;
-                var t=0; // time in ms
-                var fps = 75; // frames per second
-                var timeInterval = 1000 / fps; // in ms
-                
-                function clearCanvas() {
-                     context.clearRect( 0, 0, drawingCanvas.width, drawingCanvas.height );
-                }
-                
-                var rad = 310 * Math.PI / 180;
-                var pow = 900;
-                    
-                var b = new Bullet( context, 0, 600 );
-                //var b2 = new Bullet( context, 1000, 600 );
-                b.fire ( rad , pow );
-                
-                //rad = 230 * Math.PI / 180;
-                //b2.fire ( rad , pow );
-                
-                function updateBall() {
-                    //clearCanvas();
-                    b.update( timeInterval / 1000 );
-                    //b2.update( timeInterval / 1000 );
-                    
-                    // Update
-                    //m.draw();
-                    b.draw();
-                    //b2.draw();
-                    
-                    // Collision
-                    if ( collision.hit( b.x, (600-b.y) ) ) {
-                        clearInterval( timer );
-                        console.log('+Impact at ' + Math.floor(b.x) + ', ' + Math.floor(600-b.y));
-                    }
-                    
-                    //console.log ( 'position: ' + Math.floor(b.x) + ', ' + (600-Math.floor(b.y)) );
-                    
-                    //if ( b.y < 0 || b2.y < 0 ) {
-                    if ( b.y < 0 ) {
-                        clearInterval(timer);
-                    }
-                }
-                
-                timer = setInterval(updateBall, timeInterval);
+	<head>
+		<title>Canvas Turrets</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+		<script type="text/javascript" src="src/config.js"></script>
+		<script type="text/javascript" src="src/collision.js"></script>
+		<script type="text/javascript" src="src/mountain.js"></script>
+		<script type="text/javascript" src="src/turret.js"></script>
+		<script type="text/javascript" src="src/bullet.js"></script>
+		<script type="text/javascript">
+				window.onload = function() {
+			
+				// Variables
+				var drawingCanvas = document.getElementById('map');
+				
+				// Check the element is in the DOM and the browser supports canvas
+				if (drawingCanvas.getContext) {
+					var context = drawingCanvas.getContext('2d');
+					
+					// Move to a comfortable position
+				    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 ),
+						turret = new Turret(context, {
+							x: 40,
+							y: 270
+						});
+					
+					collision.addMap( m.generate() );
+	                var timer;
+	                var t=0; // time in ms
+	                var fps = 75; // frames per second
+	                var timeInterval = 1000 / fps; // in ms
+	                
+	                function clearCanvas() {
+	                     context.clearRect( 0, 0, drawingCanvas.width, drawingCanvas.height );
+	                }
+	                
+	                var rad = 310 * Math.PI / 180;
+	                var pow = 900;
+	                    
+	                var b = new Bullet( context, 0, 600 );
+	                var b2 = new Bullet( context, 1000, 600 );
+	                b.fire ( rad , pow );
+	                
+	                rad = 230 * Math.PI / 180;
+	                b2.fire ( rad , pow );
+	                
+	                function updateBall() {
+	                    //clearCanvas();
+	                    b.update( timeInterval / 1000 );
+	                    b2.update( timeInterval / 1000 );
+	                    
+	                    // Update
+	                    //m.draw();
+	                    b.draw();
+	                    b2.draw();
+	                    
+	                    // Collision
+	                    if ( collision.hit( b.x, b.y ) ) {
+	                        clearInterval( timer );
+	                    }
+	                }
+	                
+	                timer = setInterval(updateBall, timeInterval);
 
-            
-            }
-    </script>
-    </head>
-    <body>
-        <canvas id="map" width="1000" height="600">
-            Sorry, does not look like you have support for canvas.<br />
-            I think there's a DOS version somewhere...............
-        </canvas>
-    </body>
+					
+					// Draw loop				
+					setInterval( function () {
+						context.clearRect(0, 0, 600, 300);						
+						m.draw();
+						turret.draw();
+						updateBall();
+					}, 100);
+					
+				}
+					
+/*
+				$( window ).bind('keydown keyup', function (e) {
+					if (e.keyCode === 39) {
+						turret.incKeyDown = e.type === 'keydown';						
+						e.preventDefault();
+					} else if (e.keyCode === 37) {
+						turret.decKeyDown = e.type === 'keydown';
+						e.preventDefault();
+					}
+					
+					if (e.keyCode === 38 && e.type === 'keyup') {
+						turret.incPower();
+						e.preventDefault();
+					} else if (e.keyCode === 40 && e.type === 'keyup') {
+						turret.decPower();
+						e.preventDefault();
+					}		
+					
+					if (e.keyCode === 68) {
+						turret1.incKeyDown = e.type === 'keydown';
+						e.preventDefault();
+					} else if (e.keyCode === 65) {
+						turret1.decKeyDown = e.type === 'keydown';
+						e.preventDefault();
+					}
+				
+					if (e.keyCode === 87 && e.type === 'keyup') {
+						turret1.incPower();
+						e.preventDefault();
+					} else if (e.keyCode === 83 && e.type === 'keyup') {
+						turret1.decPower();
+						e.preventDefault();
+					}
+				});
+*/
+			};
+	</script>
+	</head>
+	<body>
+		<canvas id="map" width="1000" height="600" style="margin: 100px 0 0 100px; ">
+			Sorry, does not look like you have support for canvas.<br />
+			I think there's a DOS version somewhere...............
+		</canvas>
+	</body>
 </html>
