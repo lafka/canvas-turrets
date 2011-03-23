@@ -7,8 +7,9 @@
 		<script type="text/javascript" src="src/collision.js"></script>
 		<script type="text/javascript" src="src/mountain.js"></script>
 		<script type="text/javascript" src="src/turret.js"></script>
+		<script type="text/javascript" src="src/bullet.js"></script>
 		<script type="text/javascript">
-			window.onload = function() {
+				window.onload = function() {
 			
 				// Variables
 				var drawingCanvas = document.getElementById('map');
@@ -18,18 +19,57 @@
 					var context = drawingCanvas.getContext('2d');
 					
 					// Move to a comfortable position
-				    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height ),
+				    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 ),
 						turret = new Turret(context, {
 							x: 40,
 							y: 270
 						});
 					
+					collision.addMap( m.generate() );
+	                var timer;
+	                var t=0; // time in ms
+	                var fps = 75; // frames per second
+	                var timeInterval = 1000 / fps; // in ms
+	                
+	                function clearCanvas() {
+	                     context.clearRect( 0, 0, drawingCanvas.width, drawingCanvas.height );
+	                }
+	                
+	                var rad = 310 * Math.PI / 180;
+	                var pow = 900;
+	                    
+	                var b = new Bullet( context, 0, 600 );
+	                var b2 = new Bullet( context, 1000, 600 );
+	                b.fire ( rad , pow );
+	                
+	                rad = 230 * Math.PI / 180;
+	                b2.fire ( rad , pow );
+	                
+	                function updateBall() {
+	                    //clearCanvas();
+	                    b.update( timeInterval / 1000 );
+	                    b2.update( timeInterval / 1000 );
+	                    
+	                    // Update
+	                    //m.draw();
+	                    b.draw();
+	                    b2.draw();
+	                    
+	                    // Collision
+	                    if ( collision.hit( b.x, b.y ) ) {
+	                        clearInterval( timer );
+	                    }
+	                }
+	                
+	                timer = setInterval(updateBall, timeInterval);
+
 					
 					// Draw loop				
 					setInterval( function () {
 						context.clearRect(0, 0, 600, 300);						
 						m.draw();
 						turret.draw();
+						updateBall();
 					}, 100);
 					
 				}
@@ -73,7 +113,7 @@
 	</script>
 	</head>
 	<body>
-		<canvas id="map" width="600" height="300" style="margin: 100px 0 0 100px; ">
+		<canvas id="map" width="1000" height="600" style="margin: 100px 0 0 100px; ">
 			Sorry, does not look like you have support for canvas.<br />
 			I think there's a DOS version somewhere...............
 		</canvas>
