@@ -5,7 +5,7 @@
  * @version 0.1
  */
  
- collision = {
+var collision = {
    
     /**
      * Storage for the map
@@ -93,3 +93,5 @@
         return false;
     }
 };
+
+window.collision = collision;
