@@ -2,97 +2,37 @@
 <html>
 	<head>
 		<title>Canvas Turrets</title>
+		
+		<!-- FYI: jquery is no longer needed -->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
-		<script type="text/javascript" src="src/game.js"></script>
+		
 		<script type="text/javascript" src="src/config.js"></script>
+		<script type="text/javascript" src="src/game.js"></script>
 		<script type="text/javascript" src="src/collision.js"></script>
 		<script type="text/javascript" src="src/mountain.js"></script>
 		<script type="text/javascript" src="src/turret.js"></script>
 		<script type="text/javascript" src="src/bullet.js"></script>
 		<script type="text/javascript">
-				window.onload = function() {
+			window.onload = function() {
+			    
+			    var drawingCanvas = document.getElementById('map');
 			
-				// Variables
-				var drawingCanvas = document.getElementById('map');
-				
-				// Check the element is in the DOM and the browser supports canvas
-				if (drawingCanvas.getContext) {
-					var context = drawingCanvas.getContext('2d');
-					
-					var game = new Game( context );
-					
-					// Move to a comfortable position
-				    var m = new Mountain( context, drawingCanvas.width, drawingCanvas.height * 0.7 ),
-						turret = new Turret(context, {
-							x: 40,
-							y: 270
-						}),
-						
-						bullet1 = new Bullet( context, 0, 600 ),
-	                	bullet2 = new Bullet( context, 1000, 600 ),
-	                	
-						fps = 75,
-	                	timeInterval = 1000 / fps,
-	                	rad = 310 * Math.PI / 180,
-	                	pow = 900;
-					
-					collision.addMap( m.generate() );	                    
-	               
-	                bullet1.fire( rad, pow );
-	                
-	                rad = 230 * Math.PI / 180;
-	                bullet2.fire( rad, pow );
-	                
-					// timer = setInterval(updateBall, timeInterval);
-					
-					game.addDrawObjects( [m, turret, bullet1, bullet2] );
-					game.onPostDraw( function () {
-	                    bullet1.update( timeInterval / 1000 );
-	                    bullet2.update( timeInterval / 1000 );
-	                });
-					
-				}
-					
-/*
-				$( window ).bind('keydown keyup', function (e) {
-					if (e.keyCode === 39) {
-						turret.incKeyDown = e.type === 'keydown';						
-						e.preventDefault();
-					} else if (e.keyCode === 37) {
-						turret.decKeyDown = e.type === 'keydown';
-						e.preventDefault();
-					}
-					
-					if (e.keyCode === 38 && e.type === 'keyup') {
-						turret.incPower();
-						e.preventDefault();
-					} else if (e.keyCode === 40 && e.type === 'keyup') {
-						turret.decPower();
-						e.preventDefault();
-					}		
-					
-					if (e.keyCode === 68) {
-						turret1.incKeyDown = e.type === 'keydown';
-						e.preventDefault();
-					} else if (e.keyCode === 65) {
-						turret1.decKeyDown = e.type === 'keydown';
-						e.preventDefault();
-					}
-				
-					if (e.keyCode === 87 && e.type === 'keyup') {
-						turret1.incPower();
-						e.preventDefault();
-					} else if (e.keyCode === 83 && e.type === 'keyup') {
-						turret1.decPower();
-						e.preventDefault();
-					}
-				});
-*/
+  			   // Check the element is in the DOM and the browser supports canvas
+  			   if (drawingCanvas.getContext) {
+  			       var context = drawingCanvas.getContext('2d');
+				    
+				   // Create a new game
+				   var game = new Game( context );
+				   
+				   // Let's GO!
+				   game.start();
+  			   }
 			};
+			
 	</script>
 	</head>
 	<body>
-		<canvas id="map" width="1000" height="600" style="margin: 100px 0 0 100px; ">
+		<canvas id="map" width="1000" height="500" style="margin: 100px 0 0 100px; ">
 			Sorry, does not look like you have support for canvas.<br />
 			I think there's a DOS version somewhere...............
 		</canvas>

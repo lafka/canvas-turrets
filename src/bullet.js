@@ -14,7 +14,7 @@ Bullet.prototype = {
         // Save the context
         this.context.save();
         
-        this.context.translate( this.x, 600 -this.y ); // @todo: change this 600 to be the height of our canvas
+        this.context.translate( this.x, this.context.canvas.height - this.y );
         this.context.strokeStyle = '#666';
         this.context.fillStyle = '#f09';
         
@@ -33,10 +33,10 @@ Bullet.prototype = {
     // Update the bullet
     update: function( dt ) {
         
-        console.log( 'pos: ' + this.x + 'x' + this.y);
+//        console.log( 'pos: ' + this.x + 'x' + this.y);        // I prefer firefox and this was spamming me with errors :P  ~ Mike
         
         // Modify velocity based on gravity
-        this.velocityY += (980 * dt);
+        this.velocityY += (config.game.gravity * dt);
         
         // Move based on velocity
         this.x += (this.velocityX * dt);

@@ -1,12 +1,15 @@
+/**
+ * Mountain
+ */
 
-function Mountain( context, width, height ) {
+function Mountain( context, settings ) {
     // Variables
     this.hash = ''; // @todo
     this.context = context;
-    this.width = width;
-    this.height = height;
-    this.iter = 25; // x-axis iteration
-    this.range = 50; // range for randomization
+    this.x = ( settings.x ? settings.x : 0 );
+    this.y = ( settings.y ? settings.y : 0 );
+    this.width = ( settings.width ? settings.width : context.canvas.width );
+    this.height = ( settings.height ? settings.height : context.canvas.height );
     this.mountain = [];
 }
 
@@ -16,28 +19,29 @@ Mountain.prototype = {
     draw: function() {    	
         var m = this.generate();
         
-        this.context.translate( 0, this.context.canvas.height );
-                
         // Save the context
         this.context.save();
         
+        // Move to the starting location
+        this.context.translate( this.x, this.context.canvas.height - this.y );
+        
+        // Set colors
         this.context.strokeStyle = '#666';
         this.context.fillStyle = '#999';
         
+        // Create the path
         this.context.beginPath();
-        
         for ( x in m ) {
             this.context.lineTo( x, -m[x] );
         }
-
         this.context.closePath();
+        
+        // Color it in
         this.context.stroke();
         this.context.fill();
         
         // Restore the context
         this.context.restore();
-        
-        this.context.translate( 0, -this.context.canvas.height );
     },
     
     // Builds the mountain
@@ -45,17 +49,19 @@ Mountain.prototype = {
         
         if ( this.mountain.length != 0 ) return this.mountain;
         
-        var mid = Math.round( this.width / this.iter / 2 ); // middle index
+        // Middle index
+        var mid = Math.round( this.width / config.map.iteration / 2 );
         
         // Generate the mountain
-        
         this.mountain = [];
         this.mountain[0] = 0;
-        for ( var x = this.iter; x < this.width; x += this.iter ) {
+        for ( var x = config.map.iteration; x < this.width; x += config.map.iteration ) {
+            
             // Determine random height
-            var y = Math.floor( Math.random() * this.range );
-            y = this.height - Math.round( this.height * ( Math.abs( (x/this.iter) - mid ) / mid ) + y );
-            //var y = Math.floor( Math.random() * this.height ); // avoid the range
+            var y = Math.floor( Math.random() * config.map.range );
+            y = this.height - Math.round( this.height * ( Math.abs( (x/config.map.iteration) - mid ) / mid ) + y );
+            
+            //var y = Math.floor( Math.random() * this.height ); // use this to ignore the range
             
             this.mountain[x] = ( y > 0 ? y : 0 );
         }
