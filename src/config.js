@@ -5,7 +5,7 @@
  * @version 0.1
  */
  
-config = {
+window.config = {
     // General game settings
     game : {
         fps     : 75,
@@ -41,4 +41,9 @@ config = {
         right : 39,
         down  : 40,
     },
+    
+    dimensions : {
+    	width: 0,
+    	height: 0
+    }
 };

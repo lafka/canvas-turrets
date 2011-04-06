@@ -12,16 +12,22 @@ var Game = function (context) {
 	this.currentPlayer = -1;
 	this.bullet = null;
 	
+	this.turn = 0;
+	config.dimensions.width = context.canvas.width -200;
+	config.dimensions.height = context.canvas.height * 0.5;
 	// Create the mountain
 	this.mountain = new Mountain( context, {
 	   x: 100,
 	   y: 0,
-	   width: context.canvas.width - 200,      // @todo: use the config for the "padding"
-	   height: context.canvas.height * 0.5
+	   width: config.dimensions.width,
+	   height: config.dimensions.height
 	});
+	
+	this.wind = new Wind(this.context, config.game.wind);
 	
 	// Add two players
 	this.addPlayer(100, 0);
+	this.addPlayer(context.canvas.width - 100, 0);
 	//this.addPlayer(context.canvas.width - 100, 0); // @todo: more than one player is buggy :P
 }
 
@@ -56,7 +62,7 @@ Game.prototype = {
         
         // Mountain
         this.mountain.draw();
-        
+        this.wind.draw();
         // Bullet
         // we draw the bullet before the turret so that it looks like the bullet is coming out of the turret ^^
         if (this.bullet) {
@@ -81,14 +87,22 @@ Game.prototype = {
         if (code == config.keycodes.space) {
             
             // Test shooting
-            this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2) );
+            this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2), this.wind );
             
             var angle = player.angle + 270; // @todo: this is not good; we need to standardise how we handle angles so we don't have to do a lot of math to compensate
             var rad = angle * Math.PI / 180;
             var power = player.power;
             
             this.bullet.fire(rad, power);
+            
+            if (this.currentPlayer === 0 ) {
+            	this.currentPlayer = 1;
+            }
+            else {
+            	this.currentPlayer = 0;
+            }
         }
+        
         // Or whatever
         else {
             player.keyDown(code);
@@ -127,9 +141,10 @@ Game.prototype = {
     // Update the game entities
     update: function(dt) {
         
+    	this.wind.update();
         // Turrets
         for ( i in this.players ) {
-            this.players[i].update(dt);
+        	this.players[i].update(dt);
         }
         
         // Bullet
@@ -140,3 +155,4 @@ Game.prototype = {
         // @todo: collision detection
     },
 };
+window.game = Game;
