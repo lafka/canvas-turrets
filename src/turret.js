@@ -1,13 +1,13 @@
-var Turret = function (ctx, settings) {		
+var Turret = function (ctx, settings) {
 	this.ctx = ctx;
 	
-	this.x = (settings.x ? settings.x : 0);
-	this.y = (settings.y ? settings.y : 0);
-	this.color = (settings.color ? settings.color : '#666');
+	this.x = settings.x || 0;
+	this.y = settings.y || 0;
+	this.color = settings.color || '#666';
 	this.angle = this.rotateVal = 0;
 	this.angleInc = 5;
 	this.incKeyDown = this.decKeyDown = false;
-	this.keys = {
+	this.actions = {
 	   powerInc: false,
 	   powerDec: false,
 	   angleInc: false,
@@ -17,13 +17,12 @@ var Turret = function (ctx, settings) {
 	// Power values
 	this.power = config.turret.minPower;
 
-	this.draw();		
+	this.draw();
 };
 
 Turret.prototype = {
 	draw: function () {
-		var ctx = this.ctx;				
-			self = this;		
+		var ctx = this.ctx;		
 		
 		ctx.save();
 		
@@ -32,7 +31,6 @@ Turret.prototype = {
 		// Canon
 		ctx.save();
 		
-		//ctx.fillStyle = 'rgb(0, 0, 0)';	
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
 		ctx.arc(0, config.turret.size, config.turret.size, 2 * Math.PI , Math.PI, true);
@@ -44,74 +42,34 @@ Turret.prototype = {
 		ctx.save();
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		ctx.translate( 0, config.turret.size / 2 );
-		ctx.rotate( self.rotateVal );
+		ctx.rotate( this.rotateVal );
 		ctx.fillRect( -5, -config.turret.size, 10, config.turret.size); 
 								
 		ctx.restore();
 		
 		// Power text
-		ctx.fillText(self.power, 10, -50);	
+		ctx.fillText( this.power, 10, -50 );	
 		
 		ctx.restore();
 	},
 	
-	update: function(dt) {
-	   
-	   // Power
-	   if (this.keys.powerInc && this.power < config.turret.maxPower) {
+	update: function (dt) {
+		// Power
+		if (this.actions.powerInc && this.power < config.turret.maxPower) {
 			this.power = this.power + config.turret.powerInc;
-		}
-		else if (this.keys.powerDec && this.power > config.turret.minPower) {
+		} else if (this.actions.powerDec && this.power > config.turret.minPower) {
 			this.power = this.power - config.turret.powerInc;
 		}
-	   
-	   // Rotation
-	   if (this.keys.angleInc && self.angle < 90) {
-			self.angle += config.turret.angleInc;
-			self.rotateVal = Math.PI / 180 * ( self.angle );
-		} else if (this.keys.angleDec && self.angle >= -85) {
-			self.angle -= config.turret.angleInc;
-			self.rotateVal = Math.PI / 180 * ( self.angle );
+		
+		// Rotation
+		if (this.actions.angleInc && this.angle < 90) {
+			this.angle += config.turret.angleInc;
+			this.rotateVal = Math.PI / 180 * ( this.angle );
+		} else if (this.actions.angleDec && this.angle > -90) {
+			this.angle -= config.turret.angleInc;
+			this.rotateVal = Math.PI / 180 * ( this.angle );
 		}
-	},
-	
-	// Key was pressed
-    keyDown: function(code) {
-        
-        // Power
-        if ( code == config.keycodes.up ) {
-            this.keys.powerInc = true;
-        } else if ( code == config.keycodes.down ) {
-            this.keys.powerDec = true;
-        }
-        
-        // Rotation
-        else if ( code == config.keycodes.left ) {
-            this.keys.angleDec = true;
-        } else if ( code == config.keycodes.right ) {
-            this.keys.angleInc = true;
-        }
-        
-    },
-    
-    // Key was released
-    keyUp: function(code) {
-        
-        // Power
-        if ( code == config.keycodes.up ) {
-            this.keys.powerInc = false;
-        } else if ( code == config.keycodes.down ) {
-            this.keys.powerDec = false;
-        }
-        
-        // Rotation
-        else if ( code == config.keycodes.left ) {
-            this.keys.angleDec = false;
-        } else if ( code == config.keycodes.right ) {
-            this.keys.angleInc = false;
-        }
-        
-    },
+	}
 };
 	
 window.Turret = Turret;

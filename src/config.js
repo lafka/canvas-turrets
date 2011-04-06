@@ -5,7 +5,7 @@
  * @version 0.1
  */
  
-config = {
+window.config = {
     // General game settings
     game : {
         fps     : 75,
