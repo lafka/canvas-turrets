@@ -18,7 +18,8 @@ config = {
         iteration   : 25,       // x-axis iteration
         range       : 50,       // randomization range
         stroke      : '#666',
-        color       : '#999'
+        color       : '#999',
+        padding     : { right : 100, left :  100 }
     },
     
     // Turret settings
