@@ -9,7 +9,7 @@ window.config = {
     // General game settings
     game : {
         fps     : 75,
-        wind    : -3,
+        wind    : 5,
         gravity : 980,
     },
     
@@ -42,4 +42,9 @@ window.config = {
         right : 39,
         down  : 40,
     },
+    
+    dimensions : {
+    	width: 0,
+    	height: 0
+    }
 };

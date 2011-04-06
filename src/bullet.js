@@ -1,10 +1,11 @@
 
-function Bullet( context, x, y ) {
+function Bullet( context, x, y, wind ) {
     this.context = context;
     this.x = x;
     this.y = y;
     this.velocityX = 0;
     this.velocityY = 0;
+    this.wind = wind;
 }
 
 Bullet.prototype = {
@@ -34,9 +35,11 @@ Bullet.prototype = {
     update: function( dt ) {
         
 //        console.log( 'pos: ' + this.x + 'x' + this.y);        // I prefer firefox and this was spamming me with errors :P  ~ Mike
-        
-        // Modify velocity based on gravity
+    	
+    	this.velocityX -= this.wind.getSpeed() * dt;
+    	
         this.velocityY += (config.game.gravity * dt);
+        
         
         // Move based on velocity
         this.x += (this.velocityX * dt);

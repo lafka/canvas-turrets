@@ -12,16 +12,22 @@ var Game = function (context) {
 	this.currentPlayer = -1;
 	this.bullet = null;
 	
+	config.dimensions.width = context.canvas.width -200;
+	config.dimensions.height = context.canvas.height * 0.5;
+    
 	// Create the mountain
-	this.mountain = new Mountain( context, {
+    this.mountain = new Mountain( context, {
 		x: config.map.padding.right,
 		y: 0,
 		width: context.canvas.width - (config.map.padding.right+config.map.padding.left),		// @todo: use the config for the "padding"
 		height: context.canvas.height * 0.5
 	});
     
-    this.collision = collision;
-    this.collision.addMap(this.mountain.generate());
+	this.collision = collision;
+	this.collision.addMap(this.mountain.generate());
+	
+	//Create Wind
+	this.wind = new Wind(this.context, config.game.wind);
 	
 	// Add two players
 	this.addPlayer(100, 0);
@@ -61,6 +67,9 @@ Game.prototype = {
 		// Mountain
 		this.mountain.draw();
 		
+		// Wind
+		this.wind.draw();
+		
 		// Bullet
 		// we draw the bullet before the turret so that it looks like the bullet is coming out of the turret ^^
 		this.bullet && this.bullet.draw();
@@ -81,13 +90,20 @@ Game.prototype = {
 		if (code === config.keycodes.space) {
 			
 			// Test shooting
-			this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2) );
+			this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2), this.wind );
 			
 			var angle = player.angle + 270; // @todo: this is not good; we need to standardise how we handle angles so we don't have to do a lot of math to compensate
 			var rad = angle * Math.PI / 180;
 			var power = player.power;
 			
 			this.bullet.fire(rad, power);
+			
+            if (this.currentPlayer === 0 ) {
+            	this.currentPlayer = 1;
+            }
+            else {
+            	this.currentPlayer = 0;
+            }
 		} else {		
 			 // Power
 			 player.actions.powerInc = (code === config.keycodes.up);
@@ -138,17 +154,21 @@ Game.prototype = {
 	update: function (dt) {
 		var i;
 		
+		// Wind
+		this.wind.update();
+		
 		// Turrets
 		for (i = 0; i < this.players.length; i++) {
 			this.players[i].update(dt);
 		}
-        
-        if ( !!(this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y)) )
-        {
-            clearInterval(this.timer);
-            this.start();
-            return;
-        }
-	    this.bullet && this.bullet.update(dt);
+		
+		if ( !!(this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y)) )
+    	{
+			clearInterval(this.timer);
+			this.start();
+			return;
+		}
+		
+		this.bullet && this.bullet.update(dt);
 	},
 };
