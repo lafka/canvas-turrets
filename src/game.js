@@ -32,7 +32,7 @@ Game.prototype = {
         // @todo: randomize the x/y positions
         
         // Add a new turret
-        var turret = new Turret( this.context, {
+        var turret = new Turret( this.context, 'playerA', {
   	 	    x: x,
   		    y: y,
   		    color: config.turrets[this.players.length]}

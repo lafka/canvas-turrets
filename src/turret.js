@@ -1,4 +1,7 @@
-var Turret = function (ctx, settings) {		
+var Turret = function (ctx, identifier, settings) {
+	Turret.turrets.push( this );
+	Turret._turretRef[ identifier ] = this;
+	
 	this.ctx = ctx;
 	
 	this.x = settings.x || 0;
@@ -17,8 +20,18 @@ var Turret = function (ctx, settings) {
 	// Power values
 	this.power = config.turret.minPower;
 
-	this.draw();		
+	this.draw();
 };
+
+// Static properties
+Turret.activeTurret = undefined;
+Turret.turrets = [];
+
+Turret._turretRef = {};
+
+Turret.getTurret = function (turret) {
+	return Turret._turretRef[ turret ] || false;
+}
 
 Turret.prototype = {
 	draw: function () {
