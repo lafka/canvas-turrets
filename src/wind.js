@@ -25,6 +25,7 @@ Wind.prototype = {
         console.log(window.location.hash && parseInt(window.location.hash.replace("#","")));
         this.windSpeed = parseInt(window.location.hash.replace("#",""));
 */
+        //this.windSpeed = parseInt(window.location.hash.replace("#",""));
 	},
 	
 	getSpeed: function() {
@@ -33,6 +34,8 @@ Wind.prototype = {
 	},
 	
 	update: function() {
+		this.setSpeed(parseInt( document.getElementById('setspeed').value ));
+		return;
 		++this.ts_now;
 		var diff = this.ts_now - this.ts_start;
 		if( diff > 100 )
@@ -66,10 +69,10 @@ Wind.prototype = {
         
         this.context.beginPath();
         
-        var direction = '<----';
+        var direction = '<----' + this.windSpeed;
         if ( this.windSpeed < 0 )
         {
-        	direction = '---->';
+        	direction = this.windSpeed + ' ---->';
         }
         this.context.strokeText(direction,0,0);
         

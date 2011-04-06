@@ -32,6 +32,8 @@ var Game = function (context) {
 	// Add two players
 	this.addPlayer(100, 0);
 	this.addPlayer(context.canvas.width - 100, 0);
+	
+	this.currentPlayer = 0;
 }
 
 Game.prototype = {
@@ -73,6 +75,10 @@ Game.prototype = {
 		// Bullet
 		// we draw the bullet before the turret so that it looks like the bullet is coming out of the turret ^^
 		this.bullet && this.bullet.draw();
+		if (this.bullet)
+		{
+			bumpTheCloud(this);	
+		}
 		
 		// Turrets
 		for (i = 0; i < this.players.length; i++) {
@@ -97,7 +103,7 @@ Game.prototype = {
 			var power = player.power;
 			
 			this.bullet.fire(rad, power);
-			
+			this.firedBy = this.currentPlayer;
             if (this.currentPlayer === 0 ) {
             	this.currentPlayer = 1;
             }
@@ -164,8 +170,6 @@ Game.prototype = {
 		
 		if ( !!(this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y)) )
     	{
-			clearInterval(this.timer);
-			this.start();
 			return;
 		}
 		
