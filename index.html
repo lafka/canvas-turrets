@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="src/turret.js"></script>
 		<script type="text/javascript" src="src/bullet.js"></script>
 		<script type="text/javascript">
-			window.onload = function() {
+			window.addEventListener('load', function() {
 			    
 			    var drawingCanvas = document.getElementById('map');
 			
@@ -27,7 +27,8 @@
 				   // Let's GO!
 				   game.start();
   			   }
-			};
+  			   
+			}, true);
 			
 	</script>
 	</head>
