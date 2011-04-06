@@ -16,6 +16,8 @@ var Turret = function (ctx, settings) {
 	
 	// Power values
 	this.power = config.turret.minPower;
+	this.powerBar = new StatusBar(ctx, -50, -20);
+	this.powerBar.setMinMaxValues(0, 1000);
 
 	this.draw();
 };
@@ -24,12 +26,11 @@ Turret.prototype = {
 	draw: function () {
 		var ctx = this.ctx;		
 		
-		ctx.save();
-		
-		ctx.translate( this.x, ctx.canvas.height - this.y - config.turret.size );	
+		//ctx.save();
 		
 		// Canon
 		ctx.save();
+		ctx.translate( this.x, ctx.canvas.height - this.y - config.turret.size );	
 		
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
@@ -41,16 +42,22 @@ Turret.prototype = {
 		// Body
 		ctx.save();
 		ctx.fillStyle = 'rgb(0, 0, 0)';
-		ctx.translate( 0, config.turret.size / 2 );
+		ctx.translate( this.x, ctx.canvas.height - this.y - config.turret.size + (config.turret.size / 2) );
 		ctx.rotate( this.rotateVal );
 		ctx.fillRect( -5, -config.turret.size, 10, config.turret.size); 
 								
 		ctx.restore();
 		
+		ctx.save();
 		// Power text
-		ctx.fillText( this.power, 10, -50 );	
+		ctx.translate( this.x, ctx.canvas.height - this.y - config.turret.size + (config.turret.size / 2) );
+		ctx.fillText( this.power, 10, -50 );
 		
+		this.powerBar.value = this.power;
+		this.powerBar.draw();
+			
 		ctx.restore();
+	
 	},
 	
 	update: function (dt) {
