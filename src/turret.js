@@ -22,8 +22,7 @@ var Turret = function (ctx, settings) {
 
 Turret.prototype = {
 	draw: function () {
-		var ctx = this.ctx;				
-			self = this;		
+		var ctx = this.ctx;		
 		
 		ctx.save();
 		
@@ -32,7 +31,6 @@ Turret.prototype = {
 		// Canon
 		ctx.save();
 		
-		//ctx.fillStyle = 'rgb(0, 0, 0)';	
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
 		ctx.arc(0, config.turret.size, config.turret.size, 2 * Math.PI , Math.PI, true);
@@ -44,13 +42,13 @@ Turret.prototype = {
 		ctx.save();
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		ctx.translate( 0, config.turret.size / 2 );
-		ctx.rotate( self.rotateVal );
+		ctx.rotate( this.rotateVal );
 		ctx.fillRect( -5, -config.turret.size, 10, config.turret.size); 
 								
 		ctx.restore();
 		
 		// Power text
-		ctx.fillText(self.power, 10, -50);	
+		ctx.fillText( this.power, 10, -50 );	
 		
 		ctx.restore();
 	},
@@ -64,10 +62,10 @@ Turret.prototype = {
 		}
 		
 		// Rotation
-		if (this.actions.angleInc && self.angle < 90) {
+		if (this.actions.angleInc && this.angle < 90) {
 			this.angle += config.turret.angleInc;
 			this.rotateVal = Math.PI / 180 * ( this.angle );
-		} else if (this.actions.angleDec && self.angle > -90) {
+		} else if (this.actions.angleDec && this.angle > -90) {
 			this.angle -= config.turret.angleInc;
 			this.rotateVal = Math.PI / 180 * ( this.angle );
 		}
