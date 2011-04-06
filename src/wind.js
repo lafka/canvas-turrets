@@ -40,6 +40,7 @@ Wind.prototype = {
 			
 			if( diff > 200 )
 			{
+				this.setSpeed(-this.windSpeed);
 				this.ts_now = this.ts_start;
 				return true;
 			}
