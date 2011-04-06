@@ -6,20 +6,23 @@
 var Game = function (context) {
     
     // Set variables
-	this.context = context;
-	this.timer = null;
-	this.players = [];
+	this.context       = context;
+	this.timer         = null;
+	this.players       = [];
 	this.currentPlayer = -1;
-	this.bullet = null;
+	this.bullet        = null;
+    this.collision     = collision;
 	
 	// Create the mountain
 	this.mountain = new Mountain( context, {
-	   x: 100,
+	   x: config.map.padding.right,
 	   y: 0,
-	   width: context.canvas.width - 200,      // @todo: use the config for the "padding"
+	   width: context.canvas.width -(config.map.padding.right+config.map.padding.left),
 	   height: context.canvas.height * 0.5
 	});
-	
+
+    this.collision.addMap(this.mountain.generate());
+
 	// Add two players
 	this.addPlayer(100, 0);
 	//this.addPlayer(context.canvas.width - 100, 0); // @todo: more than one player is buggy :P
@@ -56,6 +59,7 @@ Game.prototype = {
         
         // Mountain
         this.mountain.draw();
+        
         
         // Bullet
         // we draw the bullet before the turret so that it looks like the bullet is coming out of the turret ^^
@@ -134,7 +138,13 @@ Game.prototype = {
         
         // Bullet
         if (this.bullet) {
-            this.bullet.update(dt);
+            if ( game.collision.hit(this.bullet.x-config.map.padding.right, this.bullet.y) )
+            {
+                clearInterval(this.timer);
+                this.start();
+                return true;
+            }
+            this.bullet.update(dt, this);
         }
         
         // @todo: collision detection

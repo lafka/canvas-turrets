@@ -13,6 +13,7 @@ var collision = {
      * @var map
      */
     map      : null,
+    update   : 0,
    
     /**
      * Add the map
@@ -56,6 +57,12 @@ var collision = {
         var map = this.getMap();
         x = Math.floor(x);
         
+        if ( map[x] < 0 || x < 0 || x > game.context.canvas.width )
+        {
+            console.log("you hit me!!!");
+            return true;
+        }
+        
         // The key doesent exists, that means an indirect match
         if ( map[x] === undefined ) {
             
@@ -71,6 +78,7 @@ var collision = {
                 var value   = diff*(next-x);
                 
                 if ( (map[next]-value) >= y ) {
+                    console.log("you hit me!!!");
                     return true;
                 }
             } else if ( (next-x) > (x-prev) ) {
@@ -78,14 +86,17 @@ var collision = {
                 var value   = diff*(x-prev);
                 
                 if ( (map[prev]-value) >= y ) {
+                    console.log("you hit me!!!");
                     return true;
                 }
             } else {
+                console.log("you hit me!!!");
                 return true;
             }
             
         } else {
             if ( map[x] > y ) {
+                console.log("you hit me!!!");
                 return true;    
             }
         }

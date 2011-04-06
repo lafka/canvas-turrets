@@ -15,7 +15,7 @@
 		<script type="text/javascript">
 			window.onload = function() {
 			    
-			    var drawingCanvas = document.getElementById('map');
+			   var drawingCanvas    = document.getElementById('map');
 			
   			   // Check the element is in the DOM and the browser supports canvas
   			   if (drawingCanvas.getContext) {
@@ -23,6 +23,7 @@
 				    
 				   // Create a new game
 				   var game = new Game( context );
+                   window.game = game;
 				   
 				   // Let's GO!
 				   game.start();
