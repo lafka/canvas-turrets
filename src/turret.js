@@ -1,9 +1,9 @@
 var Turret = function (ctx, settings) {		
 	this.ctx = ctx;
 	
-	this.x = (settings.x ? settings.x : 0);
-	this.y = (settings.y ? settings.y : 0);
-	this.color = (settings.color ? settings.color : '#666');
+	this.x = settings.x || 0;
+	this.y = settings.y || 0;
+	this.color = settings.color || '#666';
 	this.angle = this.rotateVal = 0;
 	this.angleInc = 5;
 	this.incKeyDown = this.decKeyDown = false;
