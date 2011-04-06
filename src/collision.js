@@ -59,7 +59,6 @@ var collision = {
         
         if ( map[x] < 0 || x < 0 || x > game.context.canvas.width )
         {
-            console.log("you hit me!!!");
             return true;
         }
         
@@ -78,7 +77,6 @@ var collision = {
                 var value   = diff*(next-x);
                 
                 if ( (map[next]-value) >= y ) {
-                    console.log("you hit me!!!");
                     return true;
                 }
             } else if ( (next-x) > (x-prev) ) {
@@ -86,17 +84,14 @@ var collision = {
                 var value   = diff*(x-prev);
                 
                 if ( (map[prev]-value) >= y ) {
-                    console.log("you hit me!!!");
                     return true;
                 }
             } else {
-                console.log("you hit me!!!");
                 return true;
             }
             
         } else {
             if ( map[x] > y ) {
-                console.log("you hit me!!!");
                 return true;    
             }
         }

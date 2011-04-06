@@ -14,11 +14,14 @@ var Game = function (context) {
 	
 	// Create the mountain
 	this.mountain = new Mountain( context, {
-		x: 100,
+		x: config.map.padding.right,
 		y: 0,
-		width: context.canvas.width - 200,		// @todo: use the config for the "padding"
+		width: context.canvas.width - (config.map.padding.right+config.map.padding.left),		// @todo: use the config for the "padding"
 		height: context.canvas.height * 0.5
 	});
+    
+    this.collision = collision;
+    this.collision.addMap(this.mountain.generate());
 	
 	// Add two players
 	this.addPlayer(100, 0);
@@ -139,10 +142,13 @@ Game.prototype = {
 		for (i = 0; i < this.players.length; i++) {
 			this.players[i].update(dt);
 		}
-		
-		// Bullet
-		this.bullet && this.bullet.update(dt);
-		
-		// @todo: collision detection
+        
+        if ( !!(this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y)) )
+        {
+            clearInterval(this.timer);
+            this.start();
+            return;
+        }
+	    this.bullet && this.bullet.update(dt);
 	},
 };
