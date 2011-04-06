@@ -16,7 +16,7 @@
 		<script type="text/javascript" src="src/turret.js"></script>
 		<script type="text/javascript" src="src/bullet.js"></script>
 		<script type="text/javascript">
-			window.onload = function() {
+			window.addEventListener('load', function() {
 			    
 			    var drawingCanvas = document.getElementById('map');
 			
@@ -29,13 +29,16 @@
 				   
 				   // Let's GO!
 				   game.start();
+				   
+				   window.GameInstance = game;
   			   }
-			};
+  			   
+			}, true);
 			
-	</script>
+		</script>
 	</head>
 	<body>
-		<canvas id="map" width="1000" height="500" style="margin: 100px 0 0 100px;border: 1px solid #111; ">
+		<canvas id="map" width="1000" height="500" style="margin: 10px 0 0 0; ">
 			Sorry, does not look like you have support for canvas.<br />
 			I think there's a DOS version somewhere...............
 		</canvas>
