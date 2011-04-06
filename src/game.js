@@ -162,10 +162,8 @@ Game.prototype = {
 			this.players[i].update(dt);
 		}
 		
-		if ( !!(this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y)) )
+		if ( this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y) )
     	{
-			clearInterval(this.timer);
-			this.start();
 			return;
 		}
 		
