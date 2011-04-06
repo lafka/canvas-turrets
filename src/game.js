@@ -22,7 +22,7 @@ var Game = function (context) {
 	
 	// Add two players
 	this.addPlayer(100, 0);
-	//this.addPlayer(context.canvas.width - 100, 0); // @todo: more than one player is buggy :P
+	this.addPlayer(context.canvas.width - 100, 0);
 }
 
 Game.prototype = {
@@ -32,11 +32,11 @@ Game.prototype = {
         // @todo: randomize the x/y positions
         
         // Add a new turret
-        var turret = new Turret( this.context, 'playerA', {
+        var turret = new Turret( this.context, {
   	 	    x: x,
   		    y: y,
-  		    color: config.turrets[this.players.length]}
-        );
+  		    color: config.turrets[this.players.length]
+		});
         this.players.push(turret);
         
         Turret.activeTurret = turret;
@@ -109,10 +109,10 @@ Game.prototype = {
         
         // Just pass it on
         var player = this.players[ this.currentPlayer ];
-        
+                
         player.actions.powerInc = (code === config.keycodes.up) && false;
         player.actions.powerDec = (code === config.keycodes.down) && false;
-        
+               
         // Rotation
         player.actions.angleDec = (code === config.keycodes.left) && false;
         player.actions.angleInc = (code === config.keycodes.right) && false;

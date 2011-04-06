@@ -1,7 +1,4 @@
-var Turret = function (ctx, identifier, settings) {
-	Turret.turrets.push( this );
-	Turret._turretRef[ identifier ] = this;
-	
+var Turret = function (ctx, settings) {
 	this.ctx = ctx;
 	
 	this.x = settings.x || 0;
@@ -22,16 +19,6 @@ var Turret = function (ctx, identifier, settings) {
 
 	this.draw();
 };
-
-// Static properties
-Turret.activeTurret = undefined;
-Turret.turrets = [];
-
-Turret._turretRef = {};
-
-Turret.getTurret = function (turret) {
-	return Turret._turretRef[ turret ] || false;
-}
 
 Turret.prototype = {
 	draw: function () {
@@ -69,22 +56,20 @@ Turret.prototype = {
 	},
 	
 	update: function (dt) {
-	   
-	   // Power
-	   if (this.actions.powerInc && this.power < config.turret.maxPower) {
+		// Power
+		if (this.actions.powerInc && this.power < config.turret.maxPower) {
 			this.power = this.power + config.turret.powerInc;
-		}
-		else if (this.actions.powerDec && this.power > config.turret.minPower) {
+		} else if (this.actions.powerDec && this.power > config.turret.minPower) {
 			this.power = this.power - config.turret.powerInc;
 		}
-	   
-	   // Rotation
-	   if (this.actions.angleInc && self.angle < 90) {
-			self.angle += config.turret.angleInc;
-			self.rotateVal = Math.PI / 180 * ( self.angle );
+		
+		// Rotation
+		if (this.actions.angleInc && self.angle < 90) {
+			this.angle += config.turret.angleInc;
+			this.rotateVal = Math.PI / 180 * ( this.angle );
 		} else if (this.actions.angleDec && self.angle > -90) {
-			self.angle -= config.turret.angleInc;
-			self.rotateVal = Math.PI / 180 * ( self.angle );
+			this.angle -= config.turret.angleInc;
+			this.rotateVal = Math.PI / 180 * ( this.angle );
 		}
 	}
 };
