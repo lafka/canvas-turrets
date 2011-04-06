@@ -69,7 +69,7 @@ Turret.prototype = {
 	   if (this.keys.angleInc && self.angle < 90) {
 			self.angle += config.turret.angleInc;
 			self.rotateVal = Math.PI / 180 * ( self.angle );
-		} else if (this.keys.angleDec && self.angle >= -85) {
+		} else if (this.keys.angleDec && self.angle > -90) {
 			self.angle -= config.turret.angleInc;
 			self.rotateVal = Math.PI / 180 * ( self.angle );
 		}
