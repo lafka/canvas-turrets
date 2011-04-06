@@ -10,7 +10,7 @@ var Turret = function (ctx, identifier, settings) {
 	this.angle = this.rotateVal = 0;
 	this.angleInc = 5;
 	this.incKeyDown = this.decKeyDown = false;
-	this.keys = {
+	this.actions = {
 	   powerInc: false,
 	   powerDec: false,
 	   angleInc: false,
@@ -71,44 +71,22 @@ Turret.prototype = {
 	update: function (dt) {
 	   
 	   // Power
-	   if (this.keys.powerInc && this.power < config.turret.maxPower) {
+	   if (this.actions.powerInc && this.power < config.turret.maxPower) {
 			this.power = this.power + config.turret.powerInc;
 		}
-		else if (this.keys.powerDec && this.power > config.turret.minPower) {
+		else if (this.actions.powerDec && this.power > config.turret.minPower) {
 			this.power = this.power - config.turret.powerInc;
 		}
 	   
 	   // Rotation
-	   if (this.keys.angleInc && self.angle < 90) {
+	   if (this.actions.angleInc && self.angle < 90) {
 			self.angle += config.turret.angleInc;
 			self.rotateVal = Math.PI / 180 * ( self.angle );
-		} else if (this.keys.angleDec && self.angle > -90) {
+		} else if (this.actions.angleDec && self.angle > -90) {
 			self.angle -= config.turret.angleInc;
 			self.rotateVal = Math.PI / 180 * ( self.angle );
 		}
-	},
-	
-	// Key was pressed
-    keyDown: function (code) {
-        // Power
-        this.keys.powerInc = (code === config.keycodes.up);
-        this.keys.powerDec = (code === config.keycodes.down);
-        
-        // Rotation
-        this.keys.angleDec = (code === config.keycodes.left);
-        this.keys.angleInc = (code === config.keycodes.right);        
-	},
-    
-    // Key was released
-    keyUp: function (code) {
-        // Power
-        this.keys.powerInc = (code === config.keycodes.up);
-        this.keys.powerDec = (code === config.keycodes.down);
-        
-        // Rotation
-        this.keys.angleDec = (code === config.keycodes.left);
-        this.keys.angleInc = (code === config.keycodes.right);
-    },
+	}
 };
 	
 window.Turret = Turret;

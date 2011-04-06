@@ -39,6 +39,8 @@ Game.prototype = {
         );
         this.players.push(turret);
         
+        Turret.activeTurret = turret;
+        
         // Set the current player
         if (this.currentPlayer == -1) {
             this.currentPlayer = 0;
@@ -90,18 +92,30 @@ Game.prototype = {
             this.bullet.fire(rad, power);
         }
         // Or whatever
-        else {
-            player.keyDown(code);
+        else {        
+	        // Power
+	        player.actions.powerInc = (code === config.keycodes.up);
+	        player.actions.powerDec = (code === config.keycodes.down);
+	        
+	        // Rotation
+	        player.actions.angleDec = (code === config.keycodes.left);
+	        player.actions.angleInc = (code === config.keycodes.right);
         }
     },
     
     // Key was released
-    keyUp: function(code) {
+    keyUp: function (code) {
         if (this.currentPlayer == -1) return; // nobody is playing :(
         
         // Just pass it on
-        var player = this.players[this.currentPlayer];
-        player.keyUp(code);
+        var player = this.players[ this.currentPlayer ];
+        
+        player.actions.powerInc = (code === config.keycodes.up) && false;
+        player.actions.powerDec = (code === config.keycodes.down) && false;
+        
+        // Rotation
+        player.actions.angleDec = (code === config.keycodes.left) && false;
+        player.actions.angleInc = (code === config.keycodes.right) && false;
     },
     
     // Start the game
