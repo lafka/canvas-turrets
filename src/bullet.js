@@ -32,12 +32,8 @@ Bullet.prototype = {
 	},
     
     // Update the bullet
-    update: function( dt ) {
-        
-//        console.log( 'pos: ' + this.x + 'x' + this.y);        // I prefer firefox and this was spamming me with errors :P  ~ Mike
-    	
-//    	this.velocityX -= this.wind.getSpeed() * dt;
-    	
+    update: function( dt ) {    	
+    	this.velocityX -= this.wind.getSpeed() * dt;
         this.velocityY += (config.game.gravity * dt);
         
         

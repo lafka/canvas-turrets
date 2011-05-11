@@ -27,7 +27,7 @@ var Game = function (context) {
 	this.collision.addMap(this.mountain.generate());
 	
 	//Create Wind
-	this.wind = new Wind(this.context, config.game.wind);
+	this.wind = new Wind(this.context);
 	
 	// Add two players
 	this.addPlayer(100, 0);
@@ -92,7 +92,7 @@ Game.prototype = {
 			
 			// Test shooting
 			this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2), this.wind );
-			console.log(this.bullet);
+			
 			var angle = player.angle + 270; // @todo: this is not good; we need to standardise how we handle angles so we don't have to do a lot of math to compensate
 			var rad = angle * Math.PI / 180;
 			var power = player.power;
@@ -156,7 +156,7 @@ Game.prototype = {
 		var i;
 		
 		// Wind
-		this.wind.update();
+		//this.wind.update();
 		
 		// Turrets
 		for (i = 0; i < this.players.length; i++) {
@@ -176,6 +176,7 @@ Game.prototype = {
     	           alert("BANG");
     	           this.mountain.generate();
     	           this.collision.addMap(this.mountain.mountain);
+    	           this.wind.updateWind();
     	       }
     	   }
 			this.bullet = null;

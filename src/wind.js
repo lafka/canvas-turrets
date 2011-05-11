@@ -1,13 +1,13 @@
 
-var Wind = function (context, speed) {
+var Wind = function (context) {
 	this.ts_start = (new Date()).getSeconds();
 	this.ts_now = this.ts_start;
 	
 	this.context = context;
 	this.x = config.dimensions.width/2;
 	this.y = 20;
-    this.setSpeed(speed);
     
+    this.minMaxSpeed = 75;
     
     this.times = [];
     
@@ -15,11 +15,14 @@ var Wind = function (context, speed) {
     	this.times.push( Math.floor(Math.random()*99) );
     }
     
+    this.windSpeed = 0;
+    
+    this.updateWind();
 }
 
 Wind.prototype = {
      setSpeed: function(speed) {
-        this.windSpeed = speed;
+      //  this.windSpeed = speed;
         
 /*
         console.log(window.location.hash && parseInt(window.location.hash.replace("#","")));
@@ -28,50 +31,40 @@ Wind.prototype = {
 	},
 	
 	getSpeed: function() {
-		
 		return this.windSpeed;
 	},
 	
-	update: function() {
-		++this.ts_now;
-		var diff = this.ts_now - this.ts_start;
-		if( diff > 100 )
-		{
-			
-			if( diff > 200 )
-			{
-				this.setSpeed(-this.windSpeed);
-				this.ts_now = this.ts_start;
-				return true;
-			}
-			diff -=100;
+	updateWind: function() {
+		var direction = Math.round(Math.random()),
+			offset = Math.floor( Math.random() * this.minMaxSpeed );
 
-			if (this.times.indexOf(diff)) {
-				this.setSpeed( this.windSpeed - 5 );
+		if (direction === 0) {
+			this.windSpeed -= offset;
+			
+			if (this.windSpeed < -1 * this.minMaxSpeed) {
+				this.windSpeed = -1 * this.minMaxSpeed;
 			}
-			/*
-			if (this.ts_now % 2 === 1) {
-				this.setSpeed( this.windSpeed - 5 );
+		} else {
+			this.windSpeed += offset;
+			
+			if (this.windSpeed > this.minMaxSpeed) {
+				this.windSpeed = this.minMaxSpeed;
 			}
-			*/
 		}
 	},
 	
 	draw: function() {
+		var text = this.windSpeed > 0 ? ' ' + this.windSpeed + '»' : '«' + Math.abs(this.windSpeed) + ' ';
+		
 		// Save the context
         this.context.save();
-        
-        this.context.translate( this.x, this.y);
-        this.context.strokeStyle = '#666';
-        
+        this.context.translate(0, 30);
+
+        this.context.font = '30px Courier';
+        this.context.textAlign = 'center';        
         this.context.beginPath();
-        
-        var direction = '<----';
-        if ( this.windSpeed < 0 )
-        {
-        	direction = '---->';
-        }
-        this.context.strokeText(direction,0,0);
+
+        this.context.fillText(text, this.context.canvas.width / 2, 0);
         
         this.context.closePath();
         this.context.stroke();
