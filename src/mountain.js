@@ -16,8 +16,8 @@ function Mountain( context, settings ) {
 Mountain.prototype = {
     
     // Draw the mountain
-    draw: function() {    	
-        var m = this.generate();
+    draw: function() {
+        var m = this.mountain.length > 0 ? this.mountain : this.generate();
         
         // Save the context
         this.context.save();
@@ -47,7 +47,7 @@ Mountain.prototype = {
     // Builds the mountain
     generate: function( hash ) {
         
-        if ( this.mountain.length != 0 ) return this.mountain;
+        // if ( this.mountain.length != 0 ) return this.mountain;
         
         // Middle index
         var mid = Math.round( this.width / config.map.iteration / 2 );

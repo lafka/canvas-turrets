@@ -92,7 +92,7 @@ Game.prototype = {
 			
 			// Test shooting
 			this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2), this.wind );
-			
+			console.log(this.bullet);
 			var angle = player.angle + 270; // @todo: this is not good; we need to standardise how we handle angles so we don't have to do a lot of math to compensate
 			var rad = angle * Math.PI / 180;
 			var power = player.power;
@@ -174,7 +174,8 @@ Game.prototype = {
     	       if ( this.bullet.x > minX && this.bullet.x < maxX && this.bullet.y < ( config.turret.size / 2 ) )
     	       {
     	           alert("BANG");
-    	           // @todo: generate new map and update scores
+    	           this.mountain.generate();
+    	           this.collision.addMap(this.mountain.mountain);
     	       }
     	   }
 			this.bullet = null;
