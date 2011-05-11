@@ -8,7 +8,7 @@
 window.config = {
     // General game settings
     game : {
-        fps     : 75,
+        fps     : 155,
         wind    : 5,
         gravity : 980,
     },

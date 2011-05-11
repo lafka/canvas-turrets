@@ -88,6 +88,7 @@ Game.prototype = {
 		
 		// Fire
 		if (code === config.keycodes.space) {
+		  if (this.bullet) return; // only only, plx
 			
 			// Test shooting
 			this.bullet = new Bullet( this.context, player.x, player.y + (config.turret.size / 2), this.wind );
@@ -162,11 +163,24 @@ Game.prototype = {
 			this.players[i].update(dt);
 		}
 		
-		if ( this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y) )
-    	{
-			return;
+		// Collision detection
+		if ( this.bullet && this.collision.hit(this.bullet.x-config.map.padding.left, this.bullet.y) ) {
+    	   // Check if we are "inside" any of the turrets
+    	   for ( var i = 0; i < this.players.length; i++ ) {
+    	       var minX = this.players[i].x - config.turret.size;
+    	       var maxX = this.players[i].x + config.turret.size;
+    	       
+    	       // This is not accurate enough
+    	       if ( this.bullet.x > minX && this.bullet.x < maxX && this.bullet.y < ( config.turret.size / 2 ) )
+    	       {
+    	           alert("BANG");
+    	           // @todo: generate new map and update scores
+    	       }
+    	   }
+			this.bullet = null;
 		}
 		
+		// Bullet
 		this.bullet && this.bullet.update(dt);
 	},
 };
